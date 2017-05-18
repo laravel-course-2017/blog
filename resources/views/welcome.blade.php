@@ -66,5 +66,7 @@
     </head>
     <body>
       LARA
+        <h1>Hello from laravel!</h1>
+        <h2>Hello 2 from laravel!</h2>
     </body>
 </html>
