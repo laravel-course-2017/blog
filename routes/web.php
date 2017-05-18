@@ -66,3 +66,5 @@ Route::get('user/{id}/{name}', 'TestController@userWrong')
         'name' => '[a-zA-Z0-9]+',
         'id' => '[a-zA-Z0-9]+'
     ]);
+
+Route::get('/view/page1', 'ViewController@page1');
