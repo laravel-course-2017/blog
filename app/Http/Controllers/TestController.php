@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Models\Person;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -68,6 +69,70 @@ class TestController extends Controller
                 'surname' => 'Ivanov',
             ],
         ];*/
+    }
+
+    public function testOrm(Request $request)
+    {
+        /*$newPerson = new Person();
+        $newPerson->name = 'Татьяна';
+        $newPerson->surname = 'Мальцева';
+        $newPerson->age = 18;
+        $newPerson->birthdate = '1999-01-01';
+        $newPerson->notes = 'Привет всем!';
+        $newPerson->save();*/
+
+        //Person::create($request->all());
+
+        Person::create([
+            'name' => 'Татьяна111',
+            'surname' => 'Мальцева222',
+            'age' => 108,
+            'birthdate' => '1999-01-01',
+            'notes' => 'Привет всем!'
+        ]);
+/*
+        $newPerson = Person::firstOrNew([
+            'age' => 18,
+            'surname' => 'Мальцева'
+        ]);
+
+        $newPerson->name = 'Татьяна2';
+        $newPerson->birthdate = '1999-01-01';
+        $newPerson->notes = 'Привет всем!';
+
+        //$personModel->age = 16;
+        $newPerson->save();
+*/
+        //dump($personModel);
+
+
+        $myPerson = Person::find(1);
+        $myPerson->age = 100;
+        $myPerson->delete();
+        //dump($myPerson);
+
+
+        //$persons = Person::all();
+
+        $persons = Person::where('name', 'Татьяна111')
+            ->where('surname', 'Мальцева222')
+            ->first();
+
+
+
+
+        //$allUsers = Person::getAllUsers();
+
+        /*foreach ($persons as $person) {
+            echo $person->name . '<br>';
+            echo $person->age;
+            echo $person['age'];
+            echo '<br><br>';
+        }*/
+
+        dump($persons);
+
+        return 'ORM';
     }
 
 

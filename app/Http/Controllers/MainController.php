@@ -8,6 +8,7 @@ class MainController extends Controller
     public function index()
     {
         $posts = [];
+        dump(file_get_contents(app_path('Classes/AwesomeClass.php')));
         /*
         dump(Auth::user());
         dump(Auth::check());

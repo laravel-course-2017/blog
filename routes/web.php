@@ -44,6 +44,7 @@ Route::get('/logout', 'AuthController@logout')
 Route::group(['prefix' => 'test'], function () {
     Route::any('/', 'TestController@index');
     Route::get('/users', 'TestController@getUsers');
+    Route::get('/testOrm', 'TestController@testOrm');
 });
 
 
