@@ -17,11 +17,10 @@
                 <h6>Навигация</h6>
                 <hr>
                 <ul class="navigation">
-                    <li> <a href="index.html">Домашняя</a> </li>
-                    <li> <a href="post.html">Новости</a> </li>
-                    <li> <a href="elements.html">Статьи</a> </li>
-                    <li> <a href="about-us.html">Обо мне</a> </li>
-                    <li> <a href="contact.html">Обратная связь</a> </li>
+                    <li> <a href="{{ route('site.main.index') }}">Главная</a> </li>
+                    <li> <a href="{{ route('site.main.about') }}">Кто я?</a> </li>
+                    <li> <a href="{{ route('site.main.feedback') }}">Написать мне</a> </li>
+                    <li> <a href="{{ route('site.auth.register') }}">Регистрация</a> </li>
                 </ul>
             </nav>
         </div>
@@ -30,10 +29,9 @@
                 <h6>Контакты</h6>
                 <hr>
                 <span class="widget-contact__text">
-                    <span class="widget-contact__title">Иванов Иван Иванович</span>
-                    <br>Email: ivan@ivanov.ru
-                    <br>Skype: ivanovivan
-                    <br>VK: https://vk.com/ivanovoficial
+                    <span class="widget-contact__title">Дмитрий Юрьев</span>
+                    <br>Email: <a href="mailto:dima@932433.ru">dima@932433.ru</a>
+                    <br>VK: <a href="https://vk.com/dyuryev84" target="_blank">https://vk.com/dyuryev84</a>
                     </span>
             </div>
         </div>

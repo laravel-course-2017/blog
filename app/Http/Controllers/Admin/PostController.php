@@ -1,0 +1,17 @@
+<?php namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+class PostController extends Controller
+{
+    public function listPosts(Request $request)
+    {
+        return 'List';
+    }
+
+    public function addPost(Request $request)
+    {
+        return 'Add';
+    }
+}

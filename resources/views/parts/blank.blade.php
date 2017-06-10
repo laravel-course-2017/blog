@@ -8,7 +8,8 @@
         <div class="col-xs-10  col-xs-offset-1">
             <div class="widget-author__content">
                 <h4>{{ $title or '' }}</h4>
-                {!! $content or '' !!}
+                <p>{!! $content or '' !!}</p>
+                {!! $link or '' !!}
             </div>
         </div>
     </div>

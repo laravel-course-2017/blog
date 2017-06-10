@@ -3,3 +3,4 @@
 @empty
     <p>Нет постов для отображения</p>
 @endforelse
+{{ $posts->links() }}

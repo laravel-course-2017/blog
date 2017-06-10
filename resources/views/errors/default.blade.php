@@ -40,7 +40,10 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Be right back.</div>
+                <div class="title">
+                    <span style="font-size: 150px">{{ $errorCode or '500' }}</span><br>
+                    {{ $errorMessage or 'Внутренняя ошибка сервера' }}
+                </div>
             </div>
         </div>
     </body>
