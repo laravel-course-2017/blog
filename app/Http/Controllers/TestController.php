@@ -1,139 +1,213 @@
-<?php namespace App\Http\Controllers;
+<?php
 
-use App\Models\Person;
+namespace App\Http\Controllers;
+
+use App\Models\Comment;
+use App\Models\Phone;
+use App\Models\Post;
+use App\Models\Upload;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Classes\AwesomeClass;
+use App\Classes\Uploader;
 
 class TestController extends Controller
 {
-    public function index(Request $request)
+    protected $awesome;
+
+    public function __construct(Request $request, AwesomeClass $awesome)
     {
-        return 'OK';
+        parent::__construct($request);
+        $this->awesome = $awesome;
     }
 
-    public function getUsers()
+    public function testGet(Uploader $uploader)
     {
+        return '<form enctype="multipart/form-data" method="POST">'.
+            csrf_field() .
+            '<input type="file" name="file" />
+            <input type="submit" value="Go!" />
+        </form>';
+    }
 
-        /*$sql = "SELECT * FROM users WHERE user = 1 OR is_admin = 2 ORDER BY count";
+    public function testPost(Request $request, Uploader $uploader, Upload $uploadModel)
+    {
+        $rules = [
+            'maxSize' => 5 * 1024 * 1024,
+            'minSize' => 10 * 1024,
+            'allowedExt' => [
+                'jpeg',
+                'jpg',
+                'png',
+                'gif',
+                'bmp',
+                'tiff'
+            ],
+            'allowedMime' => [
+                'image/jpeg',
+                'image/png',
+                'image/gif',
+                'image/bmp',
+                'image/tiff'
+            ],
+        ];
 
-        DB::table('users')
-            ->where('user', '=', '1')
-            ->or('is_admin', '=', '2')
-            ->orderBy('count')
-            ->get();
+        if ($uploader->validate($request, 'file', $rules)) {
+            $uploadedPath = $uploader->upload();
 
-        $users = DB::table('users')
-            ->join('contacts', 'users.id', '=', 'contacts.user_id')
-            ->join('orders', 'users.id', '=', 'orders.user_id')
-            ->select('users.*', 'contacts.phone', 'orders.price')
-            ->get();
+            if ($uploadedPath !== false) {
+                $uploadsModel = $uploader->register($uploadModel);
+                $uploadedProps = $uploader->getProps();
+            }
 
-        $query = DB::table('users');
+            return $uploadedPath !== false ? 'OK' : 'NE OK';
+        }
+         else {
+            dump($uploader->getErrors());
+         }
 
-        if ($a = 1) {
-            $query->where('user', '=', '1');
+        //return $uploader->getErrors();
+    }
+
+    public function testUser()
+    {
+        $userModel = User::find(1);
+        dump($userModel->phone->phone);
+
+        $phoneModel = Phone::find(1);
+        dump($phoneModel->user->name);
+        //$userModel->user_name = 'Peter Sidorov';
+        //$userModel->save();
+        //dump($userModel->user_name);
+    }
+
+    public function testComment()
+    {
+        $postModel = Post::find(1);
+        dump($postModel->comments->count());
+
+        foreach ($postModel->comments as $comment) {
+            dump($comment->comment);
         }
 
-        if ($a = 1) {
-            $query->where('user', '=', '1');
-        }
+        $commentModel = Comment::find(1);
+        dump($commentModel->post);
+    }
 
-        $query->get();
+    public function someMethod(Request $request)
+    {
+        $name = $this->request->input('name', 'Дмитрий');
+        $surname = $request->input('surname', 'Юрьев');
 
-        $users = DB::table('users')->count();
+        /*if (isset($_GET['name'])) {
+            $name = $_GET['name'];
+        } else {
+            $name = 'Дмитрий';
+        }*/
 
-        "SELECT count(*) FROM users"
+       /* var_dump($awesomeClass->getCounter());
+        var_dump($awesomeClass->getCounter());
+        var_dump($awesomeClass->getCounter());
+        var_dump($awesomeClass->getCounter());
+        var_dump($awesomeClass->getCounter());*/
+
+        $a = resolve('App\Classes\AwesomeClass');
+        var_dump($a->getCounter());
+
+
+        $b = resolve('App\Classes\AwesomeClass');
+        var_dump($b->getCounter());
+
+        /*$awesome = new \App\Classes\AwesomeClass();
+        var_dump($awesome->someSerious());
+        var_dump($awesome->someSerious());
+        var_dump($awesome->someSerious());
+        var_dump($awesome->someSerious());
         */
 
-        $users = DB::table('users')
-            ->where('name', '=', 'Дмитрий')
-            ->where('password', '=', '123')
-            ->pluck('email');
-            //->get(['email', 'name']);
-        //debug($users);
-        dump($users);
+        return view('test', [
+           'name' => $name,
+            'surname' => $surname
+        ]);
 
-        /*foreach ($users as $user) {
-            dump($user->name);
-        }*/
 
-        return 'OK';
-
-        /*return [
-            'user1' => [
-                'name' => 'Dmitrii',
-                'surname' => 'Iurev',
-            ],
-            'user2' => [
-                'name' => 'Dmitrii',
-                'surname' => 'Ivanov',
-            ],
-        ];*/
+        //return $this->request->all();
     }
-
-    public function testOrm(Request $request)
+    public function someMethod2(Request $request, $name, $surname = null)
     {
-        /*$newPerson = new Person();
-        $newPerson->name = 'Татьяна';
-        $newPerson->surname = 'Мальцева';
-        $newPerson->age = 18;
-        $newPerson->birthdate = '1999-01-01';
-        $newPerson->notes = 'Привет всем!';
-        $newPerson->save();*/
+        //$name = $this->request->input('name', 'Дмитрий');
+        //$surname = $request->input('surname', 'Юрьев');
 
-        //Person::create($request->all());
-
-        Person::create([
-            'name' => 'Татьяна111',
-            'surname' => 'Мальцева222',
-            'age' => 108,
-            'birthdate' => '1999-01-01',
-            'notes' => 'Привет всем!'
-        ]);
-/*
-        $newPerson = Person::firstOrNew([
-            'age' => 18,
-            'surname' => 'Мальцева'
-        ]);
-
-        $newPerson->name = 'Татьяна2';
-        $newPerson->birthdate = '1999-01-01';
-        $newPerson->notes = 'Привет всем!';
-
-        //$personModel->age = 16;
-        $newPerson->save();
-*/
-        //dump($personModel);
-
-
-        $myPerson = Person::find(1);
-        $myPerson->age = 100;
-        $myPerson->delete();
-        //dump($myPerson);
-
-
-        //$persons = Person::all();
-
-        $persons = Person::where('name', 'Татьяна111')
-            ->where('surname', 'Мальцева222')
-            ->first();
-
-
-
-
-        //$allUsers = Person::getAllUsers();
-
-        /*foreach ($persons as $person) {
-            echo $person->name . '<br>';
-            echo $person->age;
-            echo $person['age'];
-            echo '<br><br>';
+        /*if (isset($_GET['name'])) {
+            $name = $_GET['name'];
+        } else {
+            $name = 'Дмитрий';
         }*/
 
-        dump($persons);
+        return view('test', [
+            'name' => $name,
+            'surname' => $surname
+        ]);
 
-        return 'ORM';
+
+        //return $this->request->all();
     }
 
+    public function showPosts()
+    {
+        return view('pages.content', [
+            'mainContent' => 'Содержимое',
+            'title' => 'Заголовок страницы',
+            'template' => 'pages.content2',
+            'users' => []
+        ]);
+    }
 
+    public function awesomeMethod()
+    {
+        //AwesomeClass $awesome
+        //$awesome = $this->awesome;
+        //$awesome = new AwesomeClass();
+        /*var_dump($this->awesome->getCounter());
+        var_dump($this->awesome->getCounter());
+        var_dump($this->awesome->getCounter());
+        var_dump($this->awesome->getCounter());*/
+
+
+        /*$a = resolve('App\Classes\AwesomeClass');
+        var_dump($a->getCounter());
+        var_dump($a);*/
+
+
+        /*$b = resolve('App\Classes\AwesomeClass');
+        var_dump($b->getCounter());
+        var_dump($b);*/
+
+
+       // return '111';
+
+        /*return response('111', 200)
+            ->header('Content-Type', 'text/html')
+            ->header('access-control-allow-origin', '*')
+            ->cookie('mycookie', '1111', 86400 / 60);*/
+
+        return [
+            'a' => 1,
+            'b' => 2
+        ];
+
+
+
+        $arr = [
+            'a' => 1,
+            'b' => 2
+        ];
+
+        return response(json_encode($arr), 200)
+            ->header('Content-Type', 'application/json');
+
+
+
+        //echo '111';
+    }
 }

@@ -1,110 +1,84 @@
 <?php
-use Illuminate\Support\Facades\Route;
+
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| This file is where you may define all of the routes that are handled
+| by your application. Just tell Laravel the URIs it should respond
+| to using a Closure or controller method. Build something great!
 |
 */
 
-Route::get('/', 'MainController@index')
-    ->name('site.main.index');
-Route::get('/about.html', 'MainController@about')
-    ->name('site.main.about');
-Route::get('/feedback.html', 'MainController@feedback')
-    ->name('site.main.feedback');
-Route::get('/post/{id}.html', 'PostController@post')
-    ->name('site.posts.post')
-    ->where('id', '[\d]+');
+Route::get('/', 'MainController@index')->name('site.main.index');
+Route::get('/about.html', 'MainController@about')->name('site.main.about');
+Route::get('/feedback.html', 'MainController@feedback')->name('site.main.feedback');
+Route::post('/feedback.html', 'MainController@feedbackPost')->name('site.main.feedbackPost');
+
+
+Route::group(['prefix' => 'post'], function() {
+    Route::get('/{slug}.html', 'PostController@postBySlug')
+        ->name('site.posts.post')
+        ->where('slug', '[\:0-9A-Za-z\-]+');
+
+    Route::get('/tag/{tag}', 'PostController@listByTag')
+        ->name('site.posts.byTag')
+        ->where('tag', '.+');
+
+    Route::get('/section/{section}', 'PostController@listBySection')
+        ->name('site.posts.bySection')
+        ->where('section', '.+');
+});
+
 
 
 /**
  * Routes for register and login
  */
-Route::get('/register.html', 'AuthController@register')
-    ->name('site.auth.register');
+Route::get('/register.html', 'AuthController@register')->name('site.auth.register');
+Route::post('/register.html', 'AuthController@registerPost')->name('site.auth.registerPost');
+Route::get('/login.html', 'AuthController@login')->name('site.auth.login');
+Route::post('/login.html', 'AuthController@loginPost')->name('site.auth.loginPost');
+Route::get('/logout', 'AuthController@logout')->name('site.auth.logout');
 
-Route::post('/register.html', 'AuthController@registerPost')
-    ->name('site.auth.registerPost');
+Route::get('/test', 'TestController@testGet');
+Route::post('/test', 'TestController@testPost');
+Route::get('/test/user', 'TestController@testUser');
+Route::get('/test/comment', 'TestController@testComment');
 
-Route::get('/login.html', 'AuthController@login')
-    ->name('site.auth.login');
-
-Route::post('/login.html', 'AuthController@loginPost')
-    ->name('site.auth.loginPost');
-
-Route::get('/logout', 'AuthController@logout')
-    ->name('site.auth.logout');
-
-Route::group(['prefix' => 'test'], function () {
-    Route::any('/', 'TestController@index');
-    Route::get('/users', 'TestController@getUsers');
-    Route::get('/testOrm', 'TestController@testOrm');
-});
-
-
-/*
+/*  
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/', function () {
-    return 'FROM POST';
-});*/
-/*
-Route::put();
-Route::delete();
-Route::patch();
-          */
-/*
-Route::match(['GET', 'POST'], '/test2', function() {
-    return 'OK';
+Route::get('/test1', function() {
+    $a = 2;
+    $b = 2;
+
+    return ($a * $b);
 });
 
-Route::any('/test3', function() {
-    return 'OK!';
+Route::get('/getTimestamp', function() {
+    return time();
 });
 
+Route::get('/some', 'TestController@someMethod');
+Route::get('/awesome', 'TestController@awesomeMethod');
+Route::get('/some2/{name}/{surname?}', 'TestController@someMethod2')->where('name', '[A-Za-z]+');
+Route::get('/get/byId/{id}', 'TestController@someMethod2')->where('id', '[0-9]+');
 
-Route::get('/hand', function () {
-    return view('test');
+Route::group(['namespace' => 'Admin', 'prefix' => '/admin'], function () {
+    Route::get('posts/list', 'PostController@listPosts');
+    Route::post('posts/add', 'PostController@addPost');
 });
 
-Route::group(['prefix' => 'test'], function () {
-    Route::any('/', 'TestController@index');
-    Route::get('/users', 'TestController@getUsers');
-});
-
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
-    Route::get('/', 'AdminController@index');
-
-    Route::group(['prefix' => 'api', 'namespace' => 'Api'], function () {
-        Route::get('/', 'AdminApiController@index');
-    });
-});*/
-/*
-Route::get('user/{id?}', function ($id = null) {
-    return '#1 User '.$id;
-});
+Route::get('posts', 'TestController@showPosts');
 */
-/*
-Route::get('user/{id}/{name}', 'TestController@user')
-    ->name('getUser')
-    ->where([
-        'name' => '[a-zA-Z]+'
-    ]);
 
-Route::get('user/{id}/{name}', 'TestController@userWrong')
-    ->name('getUser')
-    ->where([
-        'name' => '[a-zA-Z0-9]+',
-        'id' => '[a-zA-Z0-9]+'
-    ]);
 
-Route::get('/view/page1', 'ViewController@page1');
-*/
+/*Route::any('{any}', function() {
+    return 'This is default route';
+})->where('any', '(.*)?');*/

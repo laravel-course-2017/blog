@@ -10,7 +10,8 @@
 
 @section('content')
     <div class="container">
-        @yield('center-column')
+        @section('center-column')
+        @show
     </div>
 @endsection
 
