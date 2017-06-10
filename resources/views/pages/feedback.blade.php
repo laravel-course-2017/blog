@@ -1,1 +1,1 @@
-@include('parts.forms.feedback')
+@include('parts.feedback-form')

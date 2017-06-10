@@ -17,22 +17,3 @@
         </div>
     </div>
 @endsection
-
-@section('bottom_scripts')
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-    <script>
-        $(function () {
-            if (window.BlogSettings.activeMenu) {
-                $('ul.navigation').find('.' + window.BlogSettings.activeMenu).addClass('active');
-            }
-        });
-    </script>
-@endsection
-
-@section('head_scripts')
-    <script>
-        window.BlogSettings = {
-            "activeMenu": "{{ $activeMenu or '' }}"
-        };
-    </script>
-@show

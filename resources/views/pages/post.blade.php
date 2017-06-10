@@ -15,7 +15,7 @@
                         <div class="col-xs-12  col-sm-4">
                             <div class="comment-icon-counter-detail">
                                 <span class="glyphicon glyphicon-comment comment-icon"></span>
-                                <span class="comment-counter">10</span>
+                                <span class="comment-counter">{{ $post->comments->count() }}</span>
                             </div>
                         </div>
                     </div>
@@ -27,7 +27,7 @@
         <div class="col-xs-10  col-xs-offset-1  col-md-8  col-md-offset-2  push-down-60">
             <div class="post-content">
                 <h1>
-                    <a href="#">{{ $post->caption }}</a>
+                    <a href="#">{{ $post->title }}</a>
                 </h1>
                 <h3>{{ $post->tagline }}</h3>
                 {{ $post->fulltext }}
@@ -35,7 +35,7 @@
             <div class="row">
                 <div class="col-xs-12  col-sm-6">
                     <div class="post-comments">
-                        <a class="btn btn-primary" href="single-post-without-image.html">Комментарии (3)</a>
+                        <a class="btn btn-primary" href="{{ url()->current() }}#postComments">Комментарии ({{ $post->comments->count() }})</a>
                     </div>
                 </div>
                 <div class="col-xs-12  col-sm-6">
@@ -51,70 +51,39 @@
                     <div class="tags">
                         <h6>Тэги</h6>
                         <hr>
-                        <a href="#" class="tags__link">Разработка</a>
-                        <a href="#" class="tags__link">Web</a>
-                        <a href="#" class="tags__link">UI/UX</a>
-                        <a href="#" class="tags__link">Жизнь</a>
-                        <a href="#" class="tags__link">Обо всем</a>
+                        @forelse($post->tags as $tag)
+                            <a href="{{ route('site.posts.byTag', ['tag' => $tag->name]) }}" class="tags__link">{{ $tag->name }}</a>
+                        @empty
+                            Пост не имеет тегов
+                        @endforelse
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-12">
-                    <div class="comments">
-                        <h6>Комментарии</h6>
+                    <div class="comments" id="postComments">
+                        <h6>Комментарии ({{ $post->comments->count() }})</h6>
                         <hr>
-                        <div class="comment clearfix">
-                            <div class="comment-avatar pull-left">
-                                <img src="images/dummy/about-5.jpg" alt="User Avatar" class="img-circle comment-avatar-image">
-                            </div>
-                            <div class="comment-body clearfix">
-                                <div class="comment-header">
-                                    <strong class="primary-font">Иванов Иван</strong>
-                                    <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;15 мая 2015 10:12
-                                    </small>
+                        @forelse($post->comments as $comment)
+                            <div class="comment clearfix">
+                                <div class="comment-avatar pull-left">
+                                    <img src="http://www.ala-access.com/s/wp-content/uploads/2016/01/analyst-placeholder-avatar.png" alt="User Avatar" class="img-circle comment-avatar-image">
                                 </div>
-                                <p class="comment-text">
-                                    Культурная аура произведения, как бы это ни казалось парадоксальным, многопланово заканчивает определенный синтез искусств. Богатство мировой литературы от Платона до Ортеги-и-Гассета свидетельствует о том, что типическое имитирует романтизм. Лабораторность
-                                    художественной культуры, по определению, готично использует персональный символический метафоризм.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="comment clearfix">
-                            <div class="comment-avatar pull-left">
-                                <img src="images/dummy/about-5.jpg" alt="User Avatar" class="img-circle comment-avatar-image">
-                            </div>
-                            <div class="comment-body clearfix">
-                                <div class="comment-header">
-                                    <strong class="primary-font">Иванов Иван</strong>
-                                    <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;15 мая 2015 10:12
-                                    </small>
+                                <div class="comment-body clearfix">
+                                    <div class="comment-header">
+                                        <strong class="primary-font">{{ $comment->user->name }}</strong>
+                                        <small class="pull-right text-muted">
+                                            <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;{{ getRusDate($comment->created_at) }}
+                                        </small>
+                                    </div>
+                                    <p class="comment-text">
+                                        {{ $comment->comment }}
+                                    </p>
                                 </div>
-                                <p class="comment-text">
-                                    Культурная аура произведения, как бы это ни казалось парадоксальным, многопланово заканчивает определенный синтез искусств. Богатство мировой литературы от Платона до Ортеги-и-Гассета свидетельствует о том, что типическое имитирует романтизм. Лабораторность
-                                    художественной культуры, по определению, готично использует персональный символический метафоризм.
-                                </p>
                             </div>
-                        </div>
-                        <div class="comment clearfix">
-                            <div class="comment-avatar pull-left">
-                                <img src="images/dummy/about-5.jpg" alt="User Avatar" class="img-circle comment-avatar-image">
-                            </div>
-                            <div class="comment-body clearfix">
-                                <div class="comment-header">
-                                    <strong class="primary-font">Иванов Иван</strong>
-                                    <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;15 мая 2015 10:12
-                                    </small>
-                                </div>
-                                <p class="comment-text">
-                                    Культурная аура произведения, как бы это ни казалось парадоксальным, многопланово заканчивает определенный синтез искусств. Богатство мировой литературы от Платона до Ортеги-и-Гассета свидетельствует о том, что типическое имитирует романтизм. Лабораторность
-                                    художественной культуры, по определению, готично использует персональный символический метафоризм.
-                                </p>
-                            </div>
-                        </div>
+                        @empty
+                            Пока комментариев нет.
+                        @endforelse
                     </div>
                 </div>
             </div>

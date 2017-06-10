@@ -6,33 +6,48 @@
     <meta name="description" content="">
     <base href="{{ route('site.main.index') }}">
     <link rel="shortcut icon" href="assets/images/favicon.png">
-    <title>{{ $title or '' }}</title>
-
+    <title>{{ $title or $titleDefault  }}</title>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,400italic|Roboto:400,700,500|Open+Sans:400,600&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="assets/css/default.css?{{ sha1(microtime(true)) }}" />
-    @yield('head_styles')
+    @section('head_styles')
+    @show
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 
-    <script src="assets/js/default.js?{{ sha1(microtime(true)) }}"></script>
-    @yield('head_scripts')
+    @section('head_scripts')
+        <script>
+            window.BlogSettings = {
+                "activeMenu": "{{ $activeMenu or '' }}"
+            };
+        </script>
+    @show
 </head>
 
 <body>
-@yield('header')
+@section('header')
+@show
 
-@yield('search_panel')
+@section('search_panel')
+@show
 
-@yield('content')
+@section('content')
+@show
 
-@yield('footer_links')
+@section('footer_links')
+@show
 
-@yield('footer_copyrights')
+@section('footer_copyrights')
+@show
 
-@yield('bottom_scripts')
+@section('bottom_scripts')
+    <script src="assets/js/default.js"></script>
+@show
 
+@section('app_scripts')
+    <script src="assets/js/app.js?{{ sha1(microtime(true)) }}"></script>
+@show
 </body>
 </html>
