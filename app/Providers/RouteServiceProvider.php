@@ -36,10 +36,9 @@ class RouteServiceProvider extends ServiceProvider
     public function map()
     {
         $this->mapApiRoutes();
-
         $this->mapWebRoutes();
-
-        //
+        $this->mapImageRoutes();
+        $this->mapDownloadRoutes();
     }
 
     /**
@@ -74,6 +73,40 @@ class RouteServiceProvider extends ServiceProvider
             'prefix' => 'api',
         ], function ($router) {
             require base_path('routes/api.php');
+        });
+    }
+
+    /**
+     * Define the "images" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapImageRoutes()
+    {
+        Route::group([
+            'namespace' => $this->namespace,
+            'prefix' => 'image'
+        ], function ($router) {
+            require base_path('routes/image.php');
+        });
+    }
+
+    /**
+     * Define the "download" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapDownloadRoutes()
+    {
+        Route::group([
+            'namespace' => $this->namespace,
+            'prefix' => 'file'
+        ], function ($router) {
+            require base_path('routes/file.php');
         });
     }
 }

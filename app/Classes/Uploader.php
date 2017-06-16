@@ -5,12 +5,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
 class Uploader
-{  
+{
     protected $file,
-              $request,
-              $props,
-              $uploadPath,
-              $validationErrors = [];
+        $request,
+        $props,
+        $uploadPath,
+        $validationErrors = [];
 
     public function validate(Request $request, $file, array $rules = [])
     {
@@ -59,10 +59,10 @@ class Uploader
 
         return !$validationFailed;
     }
-    
-    public function upload($basePath = null)
+
+    public function upload($section = null)
     {
-        $basePath = $basePath ?? ltrim(config('blog.storagePath', storage_path()) . '/' . config('blog.storageSection', ''), '/');
+        $basePath = !is_null($section) ?  config('blog.uploadPath', storage_path()) . '/'. $section : config('blog.uploadPath', storage_path()) . '/' . config('blog.defaultUploadSection', 'files');
         $newName = sha1($this->props['oldname'] . microtime(true));
         $newDir = substr($newName, 0, 1) . '/' . substr($newName, 0, 3);
         $this->uploadPath = str_replace('/', '.', $newDir . '/' . $newName);
