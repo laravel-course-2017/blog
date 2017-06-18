@@ -33,7 +33,7 @@ class TestController extends Controller
     public function testPost(Request $request, Uploader $uploader, Upload $uploadModel)
     {
         $rules = [
-            'maxSize' => 5 * 1024 * 1024,
+            'maxSize' => 10 * 1024 * 1024,
             'minSize' => 10 * 1024,
             'allowedExt' => [
                 'jpeg',
@@ -41,14 +41,16 @@ class TestController extends Controller
                 'png',
                 'gif',
                 'bmp',
-                'tiff'
+                'tiff',
+                'pdf'
             ],
             'allowedMime' => [
                 'image/jpeg',
                 'image/png',
                 'image/gif',
                 'image/bmp',
-                'image/tiff'
+                'image/tiff',
+                'application/pdf'
             ],
         ];
 
@@ -60,11 +62,12 @@ class TestController extends Controller
                 $uploadedProps = $uploader->getProps();
             }
 
-            return $uploadedPath !== false ? 'OK' : 'NE OK';
+            return $uploadedPath;
         }
-         else {
+        else {
+            dump($uploader->getProps());
             dump($uploader->getErrors());
-         }
+        }
 
         //return $uploader->getErrors();
     }
