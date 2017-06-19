@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -67,6 +68,13 @@ class Handler extends ExceptionHandler
                     'errorMessage' => 'Внутренняя ошибка сервера'
                 ], 500);
             }
+        }
+
+        if ($exception instanceof AuthorizationException) {
+            return response()->view('errors.default', [
+                'errorCode' => 403,
+                'errorMessage' => 'Доступ запрещен'
+            ], 403);
         }
 
         return parent::render($request, $exception);
