@@ -3,16 +3,26 @@
 use App\Mail\FeedbackMail;
 use App\Models\Page;
 use App\Models\Post;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 
 class MainController extends Controller
 {
     public function index()
     {
-        $posts = Post::active()
+        /*$posts = Post::with(['sections', 'comments'])
+            ->active()
             ->intime()
-            ->orderBy('id', 'DESC')
-            ->paginate(config('blog.itemsPerPage'));
+            ->latest()
+            ->paginate(config('blog.itemsPerPage'));*/
+
+        $posts = Cache::remember('postsOnMain', env('CACHE_TIME', 0), function () {
+            return Post::with(['sections', 'comments'])
+                ->active()
+                ->intime()
+                ->latest()
+                ->paginate(config('blog.itemsPerPage'));
+        });
 
         return view('layouts.primary', [
             'page' => 'pages.main',
@@ -58,8 +68,15 @@ class MainController extends Controller
             'message' => 'required|max:10240|min:10',
         ]);
 
-        Mail::to('dima@932433.ru')
+        Mail::to('yurev@ntschool.ru')
             ->send(new FeedbackMail($this->request->all()));
+
+        Mail::raw('Привет, это простое текстовое сообщение', function($message)
+        {
+            $message->from(config('blog.mailfrom'), 'Laravel');
+            $message->subject(config('blog.subject'));
+            $message->to(config('blog.mailto'));
+        });
 
         return view('layouts.primary', [
             'page' => 'parts.blank',

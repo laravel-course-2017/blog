@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SomeMail;
 use App\Models\Comment;
 use App\Models\Phone;
 use App\Models\Post;
@@ -10,6 +11,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Classes\AwesomeClass;
 use App\Classes\Uploader;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class TestController extends Controller
 {
@@ -212,5 +216,33 @@ class TestController extends Controller
 
 
         //echo '111';
+    }
+
+    public function testCache()
+    {
+        /*Cache::put('key1', 'value1', 1);
+        Cache::put('key1', 'value2', 1);*/
+        /*Cache::add('key1', 'value3', 1);
+        Cache::forever('key2', ' my value');
+
+        Cache::tags(['admin', 'users'])->put('users', ['Alice', 'Bob'], 1);
+        Cache::tags(['site', 'news'])->put('users', ['Petya', 'Vasya'], 1);
+        Cache::tags(['site', 'videos'])->put('users', ['Petya', 'Vasya'], 1);
+
+        dump(Cache::get('key2', ''));*/
+
+
+        $users = Cache::remember('users', 10, function () {
+            return DB::table('users')->get();
+            //return User::all();
+        });
+
+        dump($users);
+
+        Mail::to(['yurev@ntschool.ru'])
+            ->send(new SomeMail('Дима Юрьев'));
+
+
+        return 'OK';
     }
 }
