@@ -48,6 +48,7 @@ Route::get('/test', 'TestController@testGet');
 Route::post('/test', 'TestController@testPost');
 Route::get('/test/user', 'TestController@testUser');
 Route::get('/test/comment', 'TestController@testComment');
+Route::get('/test/cache', 'TestController@testCache');
 
 
 Route::get('/create', 'PostController@create')
