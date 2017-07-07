@@ -39,6 +39,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapWebRoutes();
         $this->mapImageRoutes();
         $this->mapDownloadRoutes();
+        $this->mapAdminRoutes();
     }
 
     /**
@@ -107,6 +108,17 @@ class RouteServiceProvider extends ServiceProvider
             'prefix' => 'file'
         ], function ($router) {
             require base_path('routes/file.php');
+        });
+    }
+
+    protected function mapAdminRoutes()
+    {
+        Route::group([
+            'namespace' => $this->namespace . '\Admin',
+            'prefix' => 'admin',
+            'middleware' => 'api',
+        ], function ($router) {
+            require base_path('routes/admin.php');
         });
     }
 }
